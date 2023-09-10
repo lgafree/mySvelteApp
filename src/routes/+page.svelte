@@ -17,7 +17,6 @@
 		<div class="m-auto flex flex-col">
 			<button type="button" class="btn-icon btn-icon-xl variant-filled mx-auto" on:click={start}>
 				<i class="fa-solid fa-paw fa-2x" />
-				<!-- <span>Press Me...eow</span> -->
 			</button>
 			<span>🐾Press Me🐾</span>
 		</div>
