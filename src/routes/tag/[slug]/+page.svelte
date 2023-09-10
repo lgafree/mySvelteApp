@@ -7,12 +7,20 @@
 
 	const subreddits = {
 		animemes: 'Animemes',
+		babies: 'babies',
 		casual: 'CasualPH',
 		cuties: 'aww',
 		dogs: 'dogsofrph',
+		earth: 'EarthPorn',
 		cats: 'catsofrph',
 		foods: 'filipinofood',
 		foods2: 'PangetPeroMasarap',
+		'old babies': 'oldBabies',
+		satisfying: 'satisfying',
+		sky: 'SkyPorn',
+		sunrise: 'sunrise',
+		sunset: 'sunset',
+		//xRATED
 		bad_yaaan: 'hubaderangpinay'
 	};
 	/** @type {import('./$types').PageData} */
@@ -45,22 +53,26 @@
 			after &&
 			!isLoading
 		) {
-			isLoading = true;
-
-			const currUrl = `https://api.reddit.com/r/${
-				subreddits[$page.params.slug]
-			}.json?raw_json=1&after=${after}`;
-
-			const res = await fetch(currUrl);
-			if (res.ok) {
-				let newBatch = (await res.json()).data;
-				posts.push.apply(posts, newBatch.children);
-				posts = posts;
-				after = newBatch.after;
-			}
-
-			isLoading = false;
+			fetchMore();
 		}
+	}
+
+	async function fetchMore() {
+		isLoading = true;
+
+		const currUrl = `https://api.reddit.com/r/${
+			subreddits[$page.params.slug]
+		}.json?raw_json=1&after=${after}`;
+
+		const res = await fetch(currUrl);
+		if (res.ok) {
+			let newBatch = (await res.json()).data;
+			posts.push.apply(posts, newBatch.children);
+			posts = posts;
+			after = newBatch.after;
+		}
+
+		isLoading = false;
 	}
 
 	function carouselLeft() {
@@ -137,10 +149,10 @@
 			</button>
 		{/if}
 	</div>
-	<div class="mx-auto lg:w-1/2 md:w-3/4 py-5 px-3 space-y-3">
+	<div class="mx-auto lg:w-1/2 md:w-3/4 py-5 px-3 space-y-3 mt-10">
 		{#each posts as post}
 			{#if post.data.thumbnail_width != null}
-				<div class="card card-hover max-h-fit variant-glass-surface mt-7">
+				<div class="card card-hover max-h-fit variant-glass-surface">
 					<header class="card-header overflow-hidden">
 						{#if post.data.secure_media}
 							{#if post.data.secure_media.reddit_video}

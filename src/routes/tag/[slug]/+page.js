@@ -5,12 +5,20 @@ import { error } from '@sveltejs/kit';
 export async function load({ params, url, fetch }) {
 	const subreddits = {
 		animemes: 'Animemes',
+		babies: 'babies',
 		casual: 'CasualPH',
 		cuties: 'aww',
 		dogs: 'dogsofrph',
+		earth: 'EarthPorn',
 		cats: 'catsofrph',
 		foods: 'filipinofood',
 		foods2: 'PangetPeroMasarap',
+		'old babies': 'oldBabies',
+		satisfying: 'satisfying',
+		sky: 'SkyPorn',
+		sunrise: 'sunrise',
+		sunset: 'sunset',
+		//xRATED
 		bad_yaaan: 'hubaderangpinay'
 	};
 
