@@ -15,11 +15,11 @@
 		<ProgressRadial stroke={50} width="w-10" class="w-15 m-auto" value={undefined} />
 	{:else}
 		<div class="m-auto flex flex-col">
-			<button type="button" class="btn-icon btn-icon-xl variant-filled" on:click={start}>
+			<button type="button" class="btn-icon btn-icon-xl variant-filled mx-auto" on:click={start}>
 				<i class="fa-solid fa-paw fa-2x" />
 				<!-- <span>Press Me...eow</span> -->
 			</button>
-			<span>Press Me</span>
+			<span>🐾Press Me🐾</span>
 		</div>
 	{/if}
 </main>
