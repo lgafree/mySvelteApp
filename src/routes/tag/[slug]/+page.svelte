@@ -12,7 +12,8 @@
 		dogs: 'dogsofrph',
 		cats: 'catsofrph',
 		foods: 'filipinofood',
-		foods2: 'PangetPeroMasarap'
+		foods2: 'PangetPeroMasarap',
+		bad_yaaan: 'hubaderangpinay'
 	};
 	/** @type {import('./$types').PageData} */
 	export let data;
@@ -87,7 +88,9 @@
 	<div class="fixed top-0 z-50 w-full">
 		<select bind:this={selectSubreddit} class="select variant-glass-error" size="1" value="1">
 			{#each Object.entries(subreddits) as [key, subreddit]}
-				<option value={key}>{key.charAt(0).toUpperCase() + key.slice(1)}</option>
+				{#if key !== 'bad_yaaan'}
+					<option value={key}>{key.charAt(0).toUpperCase() + key.slice(1)}</option>
+				{/if}
 			{/each}
 		</select>
 	</div>
