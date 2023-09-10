@@ -11,7 +11,7 @@ export async function load({ params, url, fetch }) {
 		cats: 'catsofrph',
 		foods: 'filipinofood',
 		foods2: 'PangetPeroMasarap',
-		r18: 'hubaderangpinay'
+		bad_yaaan: 'hubaderangpinay'
 	};
 
 	const currUrl = `https://api.reddit.com/r/${
