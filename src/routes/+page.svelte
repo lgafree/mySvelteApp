@@ -7,6 +7,8 @@
 
 		let url = window.location.href;
 		window.location.href = new URL(url.substring(0, url.lastIndexOf('/')) + '/' + 'tag/cuties');
+
+		isLoading = false;
 	}
 </script>
 
