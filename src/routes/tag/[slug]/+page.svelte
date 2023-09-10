@@ -5,8 +5,15 @@
 	import { ProgressRadial } from '@skeletonlabs/skeleton';
 	import { onMount } from 'svelte';
 
-	const subreddits = ['animemes', 'casual', 'cuties', 'dogs', 'cats', 'foods', 'SPG'];
-
+	const subreddits = {
+		animemes: 'Animemes',
+		casual: 'CasualPH',
+		cuties: 'aww',
+		dogs: 'dogsofrph',
+		cats: 'catsofrph',
+		foods: 'filipinofood',
+		foods2: 'PangetPeroMasarap'
+	};
 	/** @type {import('./$types').PageData} */
 	export let data;
 	let posts = [...data.data.children];
@@ -24,6 +31,7 @@
 		selectSubreddit.value = $page.params.slug;
 
 		return () => {
+			window.removeEventListener('change', fetchSubreddit);
 			window.removeEventListener('scroll', handleScroll);
 		};
 	});
@@ -35,9 +43,11 @@
 			!isLoading
 		) {
 			isLoading = true;
-			const currUrl = `https://api.reddit.com/r/${$page.params.slug}.json?after=${after}`;
-			const res = await fetch(currUrl);
 
+			const currUrl = `https://api.reddit.com/r/${
+				subreddits[$page.params.slug]
+			}.json?after=${after}`;
+			const res = await fetch(currUrl);
 			if (res.ok) {
 				let newBatch = (await res.json()).data;
 				posts.push.apply(posts, newBatch.children);
@@ -74,14 +84,14 @@
 </script>
 
 <main>
-	<div class="fixed top-0 z-50 w-full h-screen">
+	<div class="fixed top-0 z-50 w-full">
 		<select bind:this={selectSubreddit} class="select variant-glass-error" size="1" value="1">
-			{#each subreddits as subreddit}
-				<option value={subreddit}>{subreddit.charAt(0).toUpperCase() + subreddit.slice(1)}</option>
+			{#each Object.entries(subreddits) as [key, subreddit]}
+				<option value={key}>{key.charAt(0).toUpperCase() + key.slice(1)}</option>
 			{/each}
 		</select>
 	</div>
-	<div class="mx-auto lg:w-1/2 md:w-3/4 h-screen py-5 px-3 space-y-3">
+	<div class="mx-auto lg:w-1/2 md:w-3/4 py-5 px-3 space-y-3">
 		{#each posts as post}
 			{#if post.data.thumbnail_width != null}
 				<div class="card card-hover max-h-fit variant-glass-surface mt-7">

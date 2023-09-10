@@ -10,7 +10,7 @@ export async function load({ params, url, fetch }) {
 		dogs: 'dogsofrph',
 		cats: 'catsofrph',
 		foods: 'filipinofood',
-		SPG: 'PangetPeroMasarap'
+		foods2: 'PangetPeroMasarap'
 	};
 
 	const currUrl = `https://api.reddit.com/r/${
