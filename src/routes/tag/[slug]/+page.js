@@ -14,9 +14,11 @@ export async function load({ params, url, fetch }) {
 		bad_yaaan: 'hubaderangpinay'
 	};
 
-	const currUrl = `https://api.reddit.com/r/${
+	let after = url.searchParams.get('after');
+
+	let currUrl = `https://api.reddit.com/r/${
 		subreddits[params.slug]
-	}.json?after=${url.searchParams.get('after')}`;
+	}/new.json?raw_json=1&after=${after}`;
 
 	const res = await fetch(currUrl);
 

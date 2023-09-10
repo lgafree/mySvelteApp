@@ -25,14 +25,16 @@
 	 */
 	let elemCarousel;
 	let selectSubreddit;
+	let searchOpen = false;
+	let searchBox;
 
 	onMount(() => {
 		window.addEventListener('scroll', handleScroll);
-		window.addEventListener('change', fetchSubreddit);
+		selectSubreddit.addEventListener('change', fetchSubreddit);
 		selectSubreddit.value = $page.params.slug;
 
 		return () => {
-			window.removeEventListener('change', fetchSubreddit);
+			selectSubreddit.removeEventListener('change', fetchSubreddit);
 			window.removeEventListener('scroll', handleScroll);
 		};
 	});
@@ -47,7 +49,8 @@
 
 			const currUrl = `https://api.reddit.com/r/${
 				subreddits[$page.params.slug]
-			}.json?after=${after}`;
+			}.json?raw_json=1&after=${after}`;
+
 			const res = await fetch(currUrl);
 			if (res.ok) {
 				let newBatch = (await res.json()).data;
@@ -76,16 +79,40 @@
 		elemCarousel.scroll(x, 0);
 	}
 
-	async function fetchSubreddit() {
+	function toggleSearch() {
+		searchOpen = !searchOpen;
+		selectSubreddit.hidden = searchOpen;
+	}
+
+	function fetchSubreddit() {
 		let url = window.location.href;
 		window.location.href = new URL(
 			url.substring(0, url.lastIndexOf('/')) + '/' + selectSubreddit.value
 		);
 	}
+	async function searchOnSubreddit() {
+		isLoading = true;
+		posts = [];
+		posts = posts;
+
+		const currUrl = `https://api.reddit.com/r/${
+			subreddits[$page.params.slug]
+		}/search.json?raw_json=1&q=${searchBox.value}&sort=hot`;
+		const res = await fetch(currUrl);
+
+		if (res.ok) {
+			let newBatch = (await res.json()).data;
+			posts.push.apply(posts, newBatch.children);
+			posts = posts;
+			after = newBatch.after;
+		}
+
+		isLoading = false;
+	}
 </script>
 
 <main>
-	<div class="fixed top-0 z-50 w-full">
+	<div class="flex fixed top-0 z-50 w-full px-3 space-x-2">
 		<select bind:this={selectSubreddit} class="select variant-glass-error" size="1" value="1">
 			{#each Object.entries(subreddits) as [key, subreddit]}
 				{#if key !== 'bad_yaaan'}
@@ -93,6 +120,22 @@
 				{/if}
 			{/each}
 		</select>
+		{#if searchOpen}
+			<form class="w-full" on:submit|preventDefault={searchOnSubreddit}>
+				<input
+					bind:this={searchBox}
+					class="input variant-glass-error"
+					type="text"
+					placeholder="Search"
+					autofocus
+					on:blur={toggleSearch}
+				/>
+			</form>
+		{:else}
+			<button type="button" class="btn-icon variant-glass-error" on:click={toggleSearch}>
+				<i class="fa-solid fa-search fa-1x" />
+			</button>
+		{/if}
 	</div>
 	<div class="mx-auto lg:w-1/2 md:w-3/4 py-5 px-3 space-y-3">
 		{#each posts as post}
@@ -123,7 +166,7 @@
 										{#if value.p[3]}
 											<img
 												class="snap-center w-[1024px] rounded-container-token"
-												src={value.p[3].u.replaceAll('amp;', '')}
+												src={value.p[3].u}
 												loading="lazy"
 											/>
 										{:else}
@@ -151,7 +194,10 @@
 			{/if}
 		{/each}
 		{#if isLoading}
-			<ProgressRadial stroke={50} width="w-10" class="w-15 mx-auto" value={undefined} />
+			{#if posts.length === 0}
+				<div class="h-80" />
+			{/if}
+			<ProgressRadial stroke={50} width="w-10" class="w-15 m-auto" value={undefined} />
 		{/if}
 	</div>
 </main>
